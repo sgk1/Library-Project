@@ -1,0 +1,11 @@
+/* styles for the table and form elements in the library project. */
+
+table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
