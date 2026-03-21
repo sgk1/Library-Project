@@ -1,8 +1,9 @@
 //javascript for library-project
 
-const myLibrary = [];
 
-function Book (author, title, numPages, readStatus) {
+
+class Book {
+    constructor (author, title, numPages, readStatus) {
     if (!new.target) {
         throw Error('Must be called with new');
     }
@@ -13,16 +14,21 @@ function Book (author, title, numPages, readStatus) {
     this.numPages = numPages;
     this.readStatus = readStatus;
 }
-
-
-function addBookToLibrary (author, title, numPages, readStatus) {
-   const newBook = new Book(author,title,numPages,readStatus);
-    myLibrary.push(newBook);
 }
 
-const form = document.getElementById('book-form');
+class Library {
 
-form.addEventListener("submit", function(event) {
+    constructor () {
+        this.myLibrary = [];
+        this.form = document.getElementById('book-form');
+        this.tableBody = document.getElementById('table-body');
+        this.dialog = document.getElementById('my-dialog');
+        this.init();
+
+    }
+
+init () {
+    this.form.addEventListener("submit", (event) => {
 
 event.preventDefault();
 
@@ -31,22 +37,33 @@ const title = document.getElementById('title').value;
 const numPages = parseInt(document.getElementById('numPages').value);
 const readStatus = document.getElementById('readStatus').checked;
 
-addBookToLibrary(author, title, numPages, readStatus);
-form.reset();
+this.addBookToLibrary(author, title, numPages, readStatus);
+this.form.reset();
 
-displayLibrary();
+this.displayLibrary();
 
 //close the dialog after submission
-const dialog = document.getElementById('my-dialog');
-dialog.close();
+
+this.dialog.close();
 
 });
+}
 
-function displayLibrary() {
-    const tableBody = document.getElementById('table-body');
-    tableBody.innerHTML= '';
 
-    myLibrary.forEach((book) => {
+
+addBookToLibrary (author, title, numPages, readStatus) {
+   const newBook = new Book(author,title,numPages,readStatus);
+    this.myLibrary.push(newBook);
+}
+
+
+
+displayLibrary () {
+    
+    
+    this.tableBody.innerHTML= '';
+
+    this.myLibrary.forEach((book) => {
         const row = document.createElement('tr');
 
         const uniqueIDCell = document.createElement('td');
@@ -65,8 +82,8 @@ function displayLibrary() {
         const readStatusCheckbox = document.createElement('input');
         readStatusCheckbox.type = 'checkbox';
         readStatusCheckbox.checked = book.readStatus;
-        readStatusCheckbox.addEventListener('change', function() {
-            readStatusCheckboxFn (book.uniqueID, readStatusCheckbox.checked);
+        readStatusCheckbox.addEventListener('change', () => {
+            this.readStatusCheckboxFn(book.uniqueID, readStatusCheckbox.checked);
 
         });
 
@@ -74,8 +91,8 @@ function displayLibrary() {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = "Delete book";
 
-        deleteButton.addEventListener('click', function() {
-            deleteBook(book.uniqueID);
+        deleteButton.addEventListener('click', () => {
+            this.deleteBook(book.uniqueID);
         });
 
     
@@ -90,24 +107,26 @@ function displayLibrary() {
         deleteCell.appendChild(deleteButton);
         
 
-        tableBody.appendChild(row);
+        this.tableBody.appendChild(row);
 
     });
 }
 
-function deleteBook(uniqueID) {
-    const bookIndex = myLibrary.findIndex(book => book.uniqueID === uniqueID);
-    if (bookIndex !== -1) {
-        myLibrary.splice(bookIndex, 1);
-        displayLibrary();
-    }
+deleteBook (uniqueID) {
+    this.myLibrary = this.myLibrary.filter(book => book.uniqueID !== uniqueID);
+    this.displayLibrary();
 }
-
-function readStatusCheckboxFn(uniqueID, newStatus) {
-    const book = myLibrary.find(book => book.uniqueID === uniqueID);
+    
+readStatusCheckboxFn (uniqueID, newStatus) {
+    const book = this.myLibrary.find(book => book.uniqueID === uniqueID);
     if (book) {
         book.readStatus = newStatus;
-        displayLibrary();
+        this.displayLibrary();
     }
 
 }
+
+
+}
+
+const library = new Library();
