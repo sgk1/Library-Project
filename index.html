@@ -14,11 +14,12 @@
     <button command="show-modal" commandfor="my-dialog">Add book to library</button>
 
     <dialog id="my-dialog">
-    <form id ="book-form" >
+    <form id ="book-form" novalidate>
         <label for="title">Book Title</label>
         <input type="text" id="title" name="title">
         <label for="author">Author</label>
-        <input type="text" id="author" name="author">
+        <input type="text" id="author" name="author" required>
+        <p id = 'author-error' class="error"></p>
         <label for="numPages">Pages</label>
         <input type="number" id="numPages" name="pages">
         <label for="readStatus">Have you read this book?</label>

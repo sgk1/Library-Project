@@ -26,7 +26,26 @@ form.addEventListener("submit", function(event) {
 
 event.preventDefault();
 
-const author = document.getElementById('author').value;
+const author_name = document.getElementById('author');
+const authorError = document.getElementById('author-error');
+const authorValue = author_name.value.trim();
+
+if (!authorValue) {
+    authorError.textContent = 'Author name is required.';
+    return;
+}
+
+if (authorValue.length < 3) {
+    authorError.textContent = 'Author name must be at least 3 characters long.';
+    return;
+}
+
+authorError.textContent = '';
+
+const author = authorValue;
+
+
+
 const title = document.getElementById('title').value;
 const numPages = parseInt(document.getElementById('numPages').value);
 const readStatus = document.getElementById('readStatus').checked;
